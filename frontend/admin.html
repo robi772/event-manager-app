@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin felület - EventManager</title>
+  <title>Admin felulet - EventManager</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <nav class="navbar">
-    <div class="nav-brand"><a href="index.html">🎫 EventManager</a></div>
+    <div class="nav-brand"><a href="index.html">&#127915; EventManager</a></div>
     <div class="nav-links">
-      <a href="index.html" class="nav-link">Események</a>
-      <button onclick="logout()" class="nav-link btn-logout">Kilépés</button>
+      <a href="index.html" class="nav-link">Esemenyek</a>
+      <button onclick="logout()" class="nav-link btn-logout">Kilepes</button>
     </div>
   </nav>
   <main class="container">
     <div class="page-header">
-      <h1>Admin felület</h1>
-      <p>Események jóváhagyása és kezelése</p>
+      <h1>Admin felulet</h1>
+      <p>Esemenyek jovahagyasa es kezelese</p>
     </div>
     <div class="admin-tabs">
-      <button class="tab-btn active" onclick="showTab('pending')">Függőben lévő</button>
-      <button class="tab-btn" onclick="showTab('all')">Összes esemény</button>
-      <button class="tab-btn" onclick="showTab('users')">Felhasználók</button>
+      <button class="tab-btn active" data-tab="pending">Fuggőben levo</button>
+      <button class="tab-btn" data-tab="all">Osszes esemeny</button>
+      <button class="tab-btn" data-tab="users">Felhasznalok</button>
     </div>
     <div id="tab-pending" class="tab-content">
-      <div id="pending-events"><div class="loading">Betöltés...</div></div>
+      <div id="pending-events"><div class="loading">Betoltes...</div></div>
     </div>
     <div id="tab-all" class="tab-content" style="display:none">
       <div id="all-events"><div class="loading"></div></div>

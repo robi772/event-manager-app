@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esemeny szerkesztese - EventManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="index.html">&#127915; EventManager</a></div>
+    <div class="nav-links">
+      <a href="my-events.html" class="nav-link">&#8592; Sajat esemenyek</a>
+    </div>
+  </nav>
+  <main class="container">
+    <div class="form-card">
+      <h2>Esemeny szerkesztese</h2>
+      <div id="error-msg" class="alert alert-error" style="display:none"></div>
+      <div id="success-msg" class="alert alert-success" style="display:none"></div>
+      <form id="edit-event-form">
+        <div class="form-group">
+          <label>Esemeny neve *</label>
+          <input type="text" id="title" required placeholder="Pl. Tech Meetup 2026">
+        </div>
+        <div class="form-group">
+          <label>Leiras</label>
+          <textarea id="description" rows="4" placeholder="Az esemeny reszletes leirasa..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Datum es ido *</label>
+            <input type="datetime-local" id="event_date" required>
+          </div>
+          <div class="form-group">
+            <label>Max. resztvevok</label>
+            <input type="number" id="max_participants" min="1" placeholder="Korlatlan">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Helyszin *</label>
+          <input type="text" id="location" required placeholder="Pl. Budapest, Akv\u00e1rium Klub">
+        </div>
+        <button type="submit" class="btn btn-primary">Mentés</button>
+        <a href="my-events.html" class="btn btn-secondary">Mégse</a>
+      </form>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/edit-event.js"></script>
+</body>
+</html>

@@ -1,3 +1,13 @@
+async function cancelRegistration(regId) {
+  if (!confirm('Biztosan lemondod a jelentkezest?')) return;
+  try {
+    await apiRequest(`/registrations/${regId}`, { method: 'DELETE' });
+    loadMyEvents();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
 async function loadMyEvents() {
   requireAuth();
 
@@ -16,12 +26,13 @@ async function loadMyEvents() {
           <h3>${e.title}</h3>
           <p><strong>Datum:</strong> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
           <p><strong>Helyszin:</strong> ${e.location}</p>
-          <p><strong>Statusz:</strong> ${e.status}</p>
+          <p><strong>Statusz:</strong> <span class="badge badge-${e.status}">${e.status}</span></p>
           <p><strong>Jelentkezok:</strong> ${e.registration_count}</p>
+          <a class="btn btn-secondary" href="edit-event.html?id=${e.id}">Szerkesztes</a>
           <a class="btn btn-secondary" href="event-detail.html?id=${e.id}">Megtekintes</a>
         </div>
       `).join('')
-      : '<p>Meg nincs sajat esemeny.</p>';
+      : '<p>Meg nincs sajat esemeny. <a href="create-event.html">Hozz letre egyet!</a></p>';
 
     regsBox.innerHTML = regs.length
       ? regs.map(r => `
@@ -30,6 +41,7 @@ async function loadMyEvents() {
           <p><strong>Datum:</strong> ${new Date(r.event_date).toLocaleString('hu-HU')}</p>
           <p><strong>Helyszin:</strong> ${r.location}</p>
           <a class="btn btn-secondary" href="event-detail.html?id=${r.event_id}">Megtekintes</a>
+          <button class="btn btn-logout" onclick="cancelRegistration(${r.id})">Lemondas</button>
         </div>
       `).join('')
       : '<p>Meg nincs jelentkezes.</p>';
