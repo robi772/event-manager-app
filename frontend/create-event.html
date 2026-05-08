@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esemény létrehozása - EventManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="index.html">🎫 EventManager</a></div>
+    <div class="nav-links"><a href="index.html" class="nav-link">← Vissza</a></div>
+  </nav>
+  <main class="container">
+    <div class="form-card">
+      <h2>Új esemény létrehozása</h2>
+      <div id="error-msg" class="alert alert-error" style="display:none"></div>
+      <div id="success-msg" class="alert alert-success" style="display:none"></div>
+      <form id="create-event-form">
+        <div class="form-group">
+          <label>Esemény neve *</label>
+          <input type="text" id="title" required placeholder="Pl. Tech Meetup 2025">
+        </div>
+        <div class="form-group">
+          <label>Leírás</label>
+          <textarea id="description" rows="4" placeholder="Az esemény részletes leírása..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Dátum és idő *</label>
+            <input type="datetime-local" id="event_date" required>
+          </div>
+          <div class="form-group">
+            <label>Max. résztvevők</label>
+            <input type="number" id="max_participants" min="1" placeholder="Korlátlan">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Helyszín *</label>
+          <input type="text" id="location" required placeholder="Pl. Budapest, Akvárium Klub">
+        </div>
+        <button type="submit" class="btn btn-primary">Esemény létrehozása</button>
+      </form>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/create-event.js"></script>
+</body>
+</html>

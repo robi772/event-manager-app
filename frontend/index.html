@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EventManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🎫 EventManager</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Események</a>
+      <span id="nav-auth">
+        <a href="login.html" class="nav-link">Bejelentkezés</a>
+        <a href="register.html" class="nav-link btn-primary">Regisztráció</a>
+      </span>
+      <span id="nav-user" style="display:none">
+        <a href="my-events.html" class="nav-link">Saját események</a>
+        <a href="create-event.html" class="nav-link">+ Új esemény</a>
+        <span id="nav-admin" style="display:none">
+          <a href="admin.html" class="nav-link admin-link">Admin</a>
+        </span>
+        <button onclick="logout()" class="nav-link btn-logout">Kilépés</button>
+      </span>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="page-header">
+      <h1>Közelgő események</h1>
+      <p>Fedezd fel és jelentkezz a legjobb eseményekre!</p>
+    </div>
+    <div id="events-grid" class="events-grid">
+      <div class="loading">Betöltés...</div>
+    </div>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

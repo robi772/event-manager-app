@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regisztráció - EventManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="index.html">🎫 EventManager</a></div>
+  </nav>
+  <main class="container">
+    <div class="auth-card">
+      <h2>Regisztráció</h2>
+      <div id="error-msg" class="alert alert-error" style="display:none"></div>
+      <div id="success-msg" class="alert alert-success" style="display:none"></div>
+      <form id="register-form">
+        <div class="form-group">
+          <label>Felhasználónév</label>
+          <input type="text" id="username" required placeholder="Felhasználónév">
+        </div>
+        <div class="form-group">
+          <label>E-mail cím</label>
+          <input type="email" id="email" required placeholder="pelda@email.com">
+        </div>
+        <div class="form-group">
+          <label>Jelszó</label>
+          <input type="password" id="password" required placeholder="Min. 6 karakter" minlength="6">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Regisztráció</button>
+      </form>
+      <p class="auth-link">Már van fiókod? <a href="login.html">Jelentkezz be!</a></p>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

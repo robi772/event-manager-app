@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin felület - EventManager</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand"><a href="index.html">🎫 EventManager</a></div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Események</a>
+      <button onclick="logout()" class="nav-link btn-logout">Kilépés</button>
+    </div>
+  </nav>
+  <main class="container">
+    <div class="page-header">
+      <h1>Admin felület</h1>
+      <p>Események jóváhagyása és kezelése</p>
+    </div>
+    <div class="admin-tabs">
+      <button class="tab-btn active" onclick="showTab('pending')">Függőben lévő</button>
+      <button class="tab-btn" onclick="showTab('all')">Összes esemény</button>
+      <button class="tab-btn" onclick="showTab('users')">Felhasználók</button>
+    </div>
+    <div id="tab-pending" class="tab-content">
+      <div id="pending-events"><div class="loading">Betöltés...</div></div>
+    </div>
+    <div id="tab-all" class="tab-content" style="display:none">
+      <div id="all-events"><div class="loading"></div></div>
+    </div>
+    <div id="tab-users" class="tab-content" style="display:none">
+      <div id="users-list"><div class="loading"></div></div>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
