@@ -1,7 +1,10 @@
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const errorBox = document.getElementById('error-msg');
+  const submitBtn = e.target.querySelector('button[type=submit]');
   errorBox.style.display = 'none';
+  submitBtn.textContent = 'Bejelentkezés...';
+  submitBtn.disabled = true;
 
   try {
     const payload = {
@@ -19,6 +22,10 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     window.location.href = 'index.html';
   } catch (err) {
     errorBox.style.display = 'block';
-    errorBox.textContent = err.message;
+    errorBox.textContent = err.message === 'Invalid credentials'
+      ? 'Hibás e-mail cím vagy jelszó.'
+      : err.message;
+    submitBtn.textContent = 'Bejelentkezés';
+    submitBtn.disabled = false;
   }
 });

@@ -16,7 +16,6 @@ async function loadEventData() {
 
   try {
     const event = await apiRequest(`/events/${eventId}`);
-
     document.getElementById('title').value = event.title || '';
     document.getElementById('description').value = event.description || '';
     document.getElementById('location').value = event.location || '';
@@ -25,8 +24,7 @@ async function loadEventData() {
     if (event.event_date) {
       const dt = new Date(event.event_date);
       const local = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
+        .toISOString().slice(0, 16);
       document.getElementById('event_date').value = local;
     }
   } catch (err) {
@@ -42,10 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const errorBox = document.getElementById('error-msg');
     const successBox = document.getElementById('success-msg');
+    const submitBtn = e.target.querySelector('button[type=submit]');
     errorBox.style.display = 'none';
     successBox.style.display = 'none';
-
-    const eventId = getEventId();
+    submitBtn.textContent = 'Mentés...';
+    submitBtn.disabled = true;
 
     try {
       const payload = {
@@ -56,17 +55,19 @@ document.addEventListener('DOMContentLoaded', () => {
         max_participants: document.getElementById('max_participants').value || null
       };
 
-      await apiRequest(`/events/${eventId}`, {
+      await apiRequest(`/events/${getEventId()}`, {
         method: 'PUT',
         body: JSON.stringify(payload)
       });
 
       successBox.style.display = 'block';
-      successBox.textContent = 'Esemény sikeresen frissítve!';
+      successBox.textContent = '✓ Esemény sikeresen frissítve!';
       setTimeout(() => window.location.href = 'my-events.html', 1200);
     } catch (err) {
       errorBox.style.display = 'block';
-      errorBox.textContent = err.message;
+      errorBox.textContent = 'Hiba: ' + err.message;
+      submitBtn.textContent = 'Mentés';
+      submitBtn.disabled = false;
     }
   });
 });

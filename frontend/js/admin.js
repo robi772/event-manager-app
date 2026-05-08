@@ -6,6 +6,8 @@ function showTab(tab, btn) {
 }
 
 async function updateEventStatus(id, status) {
+  const label = status === 'approved' ? 'jóváhagyod' : 'elutasítod';
+  if (!confirm(`Biztosan ${label} ezt az eseményt?`)) return;
   try {
     await apiRequest(`/admin/events/${id}/status`, {
       method: 'PATCH',
@@ -13,17 +15,17 @@ async function updateEventStatus(id, status) {
     });
     loadAdminData();
   } catch (err) {
-    alert(err.message);
+    alert('Hiba: ' + err.message);
   }
 }
 
 async function deleteEvent(id) {
-  if (!confirm('Biztosan torlod ezt az esemenyt?')) return;
+  if (!confirm('Biztosan törlöd ezt az eseményt? Ez a művelet nem vonható vissza.')) return;
   try {
     await apiRequest(`/admin/events/${id}`, { method: 'DELETE' });
     loadAdminData();
   } catch (err) {
-    alert(err.message);
+    alert('Hiba: ' + err.message);
   }
 }
 
@@ -35,6 +37,9 @@ async function loadAdminData() {
     return;
   }
 
+  const statusLabels = { approved: '✓ Jóváhagyott', pending: '⏳ Függőben', rejected: '✗ Elutasított' };
+  const statusClass = { approved: 'success', pending: 'warning', rejected: 'error' };
+
   try {
     const [events, users] = await Promise.all([
       apiRequest('/admin/events'),
@@ -42,42 +47,55 @@ async function loadAdminData() {
     ]);
 
     const pending = events.filter(e => e.status === 'pending');
+
     document.getElementById('pending-events').innerHTML = pending.length
       ? pending.map(e => `
         <div class="event-card">
-          <h3>${e.title}</h3>
-          <p><strong>Helyszin:</strong> ${e.location}</p>
-          <p><strong>Datum:</strong> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
-          <p><strong>Szervezo:</strong> ${e.organizer_name}</p>
-          <button class="btn btn-primary" onclick="updateEventStatus(${e.id}, 'approved')">Jovahagyas</button>
-          <button class="btn btn-secondary" onclick="updateEventStatus(${e.id}, 'rejected')">Elutasitas</button>
+          <div class="event-card-body">
+            <h3>${e.title}</h3>
+            <p><span class="label">📍 Helyszín:</span> ${e.location}</p>
+            <p><span class="label">📅 Dátum:</span> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
+            <p><span class="label">👤 Szervező:</span> ${e.organizer_name}</p>
+          </div>
+          <div class="event-card-footer">
+            <button class="btn btn-primary" onclick="updateEventStatus(${e.id}, 'approved')">✓ Jóváhagyás</button>
+            <button class="btn btn-secondary" onclick="updateEventStatus(${e.id}, 'rejected')">✗ Elutasítás</button>
+          </div>
         </div>
       `).join('')
-      : '<p>Nincs fuggőben levo esemeny.</p>';
+      : '<p class="muted">Nincs függőben lévő esemény.</p>';
 
     document.getElementById('all-events').innerHTML = events.length
       ? events.map(e => `
         <div class="event-card">
-          <h3>${e.title}</h3>
-          <p><strong>Statusz:</strong> ${e.status}</p>
-          <p><strong>Szervezo:</strong> ${e.organizer_name}</p>
-          <button class="btn btn-secondary" onclick="deleteEvent(${e.id})">Torles</button>
+          <div class="event-card-body">
+            <h3>${e.title}</h3>
+            <p><span class="label">📌 Státusz:</span> <span class="badge badge-${statusClass[e.status]}">${statusLabels[e.status] || e.status}</span></p>
+            <p><span class="label">👤 Szervező:</span> ${e.organizer_name}</p>
+            <p><span class="label">📅 Dátum:</span> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
+          </div>
+          <div class="event-card-footer">
+            <button class="btn btn-danger" onclick="deleteEvent(${e.id})">🗑 Törlés</button>
+          </div>
         </div>
       `).join('')
-      : '<p>Nincs esemeny.</p>';
+      : '<p class="muted">Nincs esemény.</p>';
 
     document.getElementById('users-list').innerHTML = users.length
       ? users.map(u => `
         <div class="event-card">
-          <h3>${u.username}</h3>
-          <p>${u.email}</p>
-          <p><strong>Szerep:</strong> ${u.role}</p>
-          <p><strong>Regisztralt:</strong> ${new Date(u.created_at).toLocaleDateString('hu-HU')}</p>
+          <div class="event-card-body">
+            <h3>${u.username}</h3>
+            <p>${u.email}</p>
+            <p><span class="label">Szerep:</span> ${u.role}</p>
+            <p><span class="label">Regisztrált:</span> ${new Date(u.created_at).toLocaleDateString('hu-HU')}</p>
+          </div>
         </div>
       `).join('')
-      : '<p>Nincs felhasznalo.</p>';
+      : '<p class="muted">Nincs felhasználó.</p>';
+
   } catch (err) {
-    document.getElementById('pending-events').innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+    document.getElementById('pending-events').innerHTML = `<div class="alert alert-error">Hiba: ${err.message}</div>`;
     document.getElementById('all-events').innerHTML = '';
     document.getElementById('users-list').innerHTML = '';
   }

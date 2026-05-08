@@ -1,10 +1,10 @@
 async function cancelRegistration(regId) {
-  if (!confirm('Biztosan lemondod a jelentkezest?')) return;
+  if (!confirm('Biztosan lemondod a jelentkezést?')) return;
   try {
     await apiRequest(`/registrations/${regId}`, { method: 'DELETE' });
     loadMyEvents();
   } catch (err) {
-    alert(err.message);
+    alert('Hiba: ' + err.message);
   }
 }
 
@@ -13,6 +13,9 @@ async function loadMyEvents() {
 
   const eventsBox = document.getElementById('my-events-list');
   const regsBox = document.getElementById('my-registrations-list');
+
+  const statusLabels = { approved: '✓ Jóváhagyott', pending: '⏳ Függőben', rejected: '✗ Elutasított' };
+  const statusClass = { approved: 'success', pending: 'warning', rejected: 'error' };
 
   try {
     const [events, regs] = await Promise.all([
@@ -23,30 +26,38 @@ async function loadMyEvents() {
     eventsBox.innerHTML = events.length
       ? events.map(e => `
         <div class="event-card">
-          <h3>${e.title}</h3>
-          <p><strong>Datum:</strong> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
-          <p><strong>Helyszin:</strong> ${e.location}</p>
-          <p><strong>Statusz:</strong> <span class="badge badge-${e.status}">${e.status}</span></p>
-          <p><strong>Jelentkezok:</strong> ${e.registration_count}</p>
-          <a class="btn btn-secondary" href="edit-event.html?id=${e.id}">Szerkesztes</a>
-          <a class="btn btn-secondary" href="event-detail.html?id=${e.id}">Megtekintes</a>
+          <div class="event-card-body">
+            <h3>${e.title}</h3>
+            <p><span class="label">📅 Dátum:</span> ${new Date(e.event_date).toLocaleString('hu-HU')}</p>
+            <p><span class="label">📍 Helyszín:</span> ${e.location}</p>
+            <p><span class="label">📌 Státusz:</span> <span class="badge badge-${statusClass[e.status]}">${statusLabels[e.status] || e.status}</span></p>
+            <p><span class="label">👥 Jelentkezők:</span> ${e.registration_count}${e.max_participants ? ' / ' + e.max_participants : ''}</p>
+          </div>
+          <div class="event-card-footer">
+            <a class="btn btn-secondary" href="edit-event.html?id=${e.id}">✎ Szerkesztés</a>
+            <a class="btn btn-secondary" href="event-detail.html?id=${e.id}">Megtekintés</a>
+          </div>
         </div>
       `).join('')
-      : '<p>Meg nincs sajat esemeny. <a href="create-event.html">Hozz letre egyet!</a></p>';
+      : '<p class="muted">Még nincs saját eseményed. <a href="create-event.html">Hozz létre egyet!</a></p>';
 
     regsBox.innerHTML = regs.length
       ? regs.map(r => `
         <div class="event-card">
-          <h3>${r.title}</h3>
-          <p><strong>Datum:</strong> ${new Date(r.event_date).toLocaleString('hu-HU')}</p>
-          <p><strong>Helyszin:</strong> ${r.location}</p>
-          <a class="btn btn-secondary" href="event-detail.html?id=${r.event_id}">Megtekintes</a>
-          <button class="btn btn-logout" onclick="cancelRegistration(${r.id})">Lemondas</button>
+          <div class="event-card-body">
+            <h3>${r.title}</h3>
+            <p><span class="label">📅 Dátum:</span> ${new Date(r.event_date).toLocaleString('hu-HU')}</p>
+            <p><span class="label">📍 Helyszín:</span> ${r.location}</p>
+          </div>
+          <div class="event-card-footer">
+            <a class="btn btn-secondary" href="event-detail.html?id=${r.event_id}">Megtekintés</a>
+            <button class="btn btn-danger" onclick="cancelRegistration(${r.id})">Lemondás</button>
+          </div>
         </div>
       `).join('')
-      : '<p>Meg nincs jelentkezes.</p>';
+      : '<p class="muted">Még nincs jelentkezésed.</p>';
   } catch (err) {
-    eventsBox.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+    eventsBox.innerHTML = `<div class="alert alert-error">Hiba: ${err.message}</div>`;
     regsBox.innerHTML = '';
   }
 }

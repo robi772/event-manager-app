@@ -6,8 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const errorBox = document.getElementById('error-msg');
     const successBox = document.getElementById('success-msg');
+    const submitBtn = e.target.querySelector('button[type=submit]');
     errorBox.style.display = 'none';
     successBox.style.display = 'none';
+    submitBtn.textContent = 'Létrehozás...';
+    submitBtn.disabled = true;
 
     try {
       const payload = {
@@ -24,11 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       successBox.style.display = 'block';
-      successBox.textContent = 'Esemeny letrehozva! Jovahagyasra var.';
+      successBox.textContent = '✓ Esemény sikeresen létrehozva! Jóváhagyásra vár.';
       e.target.reset();
     } catch (err) {
       errorBox.style.display = 'block';
-      errorBox.textContent = err.message;
+      errorBox.textContent = 'Hiba: ' + err.message;
+    } finally {
+      submitBtn.textContent = 'Esemény létrehozása';
+      submitBtn.disabled = false;
     }
   });
 });
